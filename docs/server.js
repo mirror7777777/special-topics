@@ -12,39 +12,34 @@ app.listen(Port , ()=>{
     console.log(`Port is open at: http://localhost:${Port}`)
 })
 app.get('/', (req, res) => {
- res.sendFile(path.join(__dirname, 'pages/index.html'))
+ res.sendFile(path.join(__dirname, 'index.html'))
 });
 app.get('/Games', (req, res) => {
- res.sendFile(path.join(__dirname, 'public/Games.html'))
+ res.sendFile(path.join(__dirname, 'pages/Games.html'))
 });
-app.get('/Product', (req, res) => {
- res.sendFile(path.join(__dirname, 'public/Product.html'))
+app.get('/product', (req, res) => {
+ res.sendFile(path.join(__dirname, 'pages/product.html'))
 });
 
 app.get('/images/key-skull', (req, res) => {
- res.sendFile(path.join(__dirname, 'Assets/key-skull.jpg'))
-});
-app.get('/images/blue-pad', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/blue-pad.jpg.jpg"))
+ res.sendFile(path.join(__dirname, 'assets/key-skull.jpg'))
 });
 app.get('/images/red-pad', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/red-pad3.jpg"))
+ res.sendFile(path.join(__dirname,  "assets/red-pad3.jpg"))
 });
 app.get('/images/see-game', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/see-game.jpg"))
+ res.sendFile(path.join(__dirname,  "assets/see-game.jpg"))
 });
-app.get('/images/skull-pad.', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/skull-pad.jpg"))
-});
+
 app.get('/images/x-box-A', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/x-box-A.jpg"))
+ res.sendFile(path.join(__dirname,  "assets/x-box-A.jpg"))
 });
 app.get('/images/x-boxSilver', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/x-box-silver.jpg"))
+ res.sendFile(path.join(__dirname,  "assets/x-box-silver.jpg"))
 });
 app.get('/images/x-gamepad', (req, res) => {
- res.sendFile(path.join(__dirname,  "Assets/x-gamepad.jpg"))
+ res.sendFile(path.join(__dirname,  "assets/x-gamepad.jpg"))
 });
 app.get('/data', (req, res) => {
- res.sendFile(path.join(__dirname, 'Assets/data/productData.json'))
+ res.sendFile(path.join(__dirname, 'assets/data/productData.json'))
 }); 

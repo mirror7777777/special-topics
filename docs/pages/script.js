@@ -79,76 +79,41 @@
 
             restartButton.addEventListener('click', restartGame);
         });
-window.onload = () => {
-  const productList = document.getElementById('product-list');
-  const cartList = document.getElementById('cart');
-  let cart = [];
 
-  async function fetchProducts() {
-    try {
-      const response = await fetch('http://localhost:4093/data'); // Replace with your actual API
-      const products = await response.json();
-      console.log(products)
-      displayProducts(products);
-    } catch (error) {
-      const errorMsg = document.createElement('p');
-      errorMsg.textContent = 'Failed to load products.';
-      productList.appendChild(errorMsg);
-      console.error(`an error occured : ${error}`);
-    }
-  }
+document.addEventListener('DOMContentLoaded', () => {
+    const productContainer = document.getElementById('product-container');
 
-  function displayProducts(products) {
-    productList.innerHTML = ''; // Clear previous content
+    // Function to fetch and display product data
+    const fetchProductData = async () => {
+        try {
+            // Replace with your server's URL
+            const response = await fetch('http://localhost:4093/data'); 
+            const product = await response.json();
+            console.log(product)
+            // Create and append the product element
+            if (product && product.length> 0) {
+              product.forEach((item)=>{
+            const productElement = document.createElement('div');
+            productElement.classList.add('product');
+            productElement.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <h2>${item.name}</h2>
+                <p>${item.description}</p>
+                <p class="price">$${item.price}</p>
+                <p class="availability">${item.availability}</p>
+            `;
+            productContainer.appendChild(productElement);
 
-    products.forEach(product => {
-      const div = document.createElement('div');
-      div.className = 'product';
 
-      const img = document.createElement('img');
-      img.src = product.image;
-      img.alt = product.name;
+              })
+            }
+          
 
-      const name = document.createElement('h4');
-      name.textContent = product.name;
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+            productContainer.innerHTML = '<p>Failed to load product data. Please try again later.</p>';
+        }
+    };
 
-      const price = document.createElement('p');
-      price.textContent = `$${product.price.toFixed(2)}`;
-
-      const availability = document.createElement('p');
-      availability.textContent = product.availability ? 'In Stock' : 'Out of Stock';
-
-      const button = document.createElement('button');
-      button.textContent = 'Add to Cart';
-      if (!product.availability) {
-        button.disabled = true;
-      }
-      button.onclick = () => addToCart(product);
-
-      div.appendChild(img);
-      div.appendChild(name);
-      div.appendChild(price);
-      div.appendChild(availability);
-      div.appendChild(button);
-
-      productList.appendChild(div);
-    });
-  }
-
-  function addToCart(product) {
-    cart.push(product);
-    updateCart();
-  }
-
-  function updateCart() {
-    cartList.innerHTML = ''; // Clear previous cart items
-
-    cart.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-      cartList.appendChild(li);
-    });
-  }
-
-  fetchProducts();
-};
+    fetchProductData();
+});
