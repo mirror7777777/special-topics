@@ -1,35 +1,3 @@
-const startBtn = document.getElementById('start-btn');
-const screen = document.getElementById('screen');
-const message = document.getElementById('message');
-const result = document.getElementById('result');
-
-let startTime;
-let timeout;
-
-startBtn.onclick = () => {
-  message.textContent = 'Wait for green...';
-  result.textContent = '';
-  screen.style.backgroundColor = '#333';
-  startBtn.disabled = true;
-
-  timeout = setTimeout(() => {
-    screen.style.backgroundColor = 'green';
-    message.textContent = 'CLICK!';
-    startTime = Date.now();
-  }, Math.random() * 3000 + 2000); // 2–5 seconds
-};
-
-screen.onclick = () => {
-  if (screen.style.backgroundColor === 'green') {
-    const reactionTime = Date.now() - startTime;
-    result.textContent = `Your reaction time: ${reactionTime} ms`;
-    startBtn.disabled = false;
-  } else {
-    clearTimeout(timeout);
-    message.textContent = 'Too soon! Try again.';
-    startBtn.disabled = false;
-  }
-};
 
   document.addEventListener('DOMContentLoaded', () => {
             const gameBoard = document.getElementById('gameBoard');
@@ -111,54 +79,76 @@ screen.onclick = () => {
 
             restartButton.addEventListener('click', restartGame);
         });
-const productList = document.getElementById('product-list');
-const cartList = document.getElementById('cart');
-let cart = [];
+window.onload = () => {
+  const productList = document.getElementById('product-list');
+  const cartList = document.getElementById('cart');
+  let cart = [];
 
-async function fetchProducts() {
-  try {
-    const response = await fetch('https://your-api-url.com/products'); // Replace with your actual API
-    const products = await response.json();
-    displayProducts(products);
-  } catch (error) {
-    productList.innerHTML = '<p>Failed to load products.</p>';
-    console.error(error);
+  async function fetchProducts() {
+    try {
+      const response = await fetch('http://localhost:4093/data'); // Replace with your actual API
+      const products = await response.json();
+      console.log(products)
+      displayProducts(products);
+    } catch (error) {
+      const errorMsg = document.createElement('p');
+      errorMsg.textContent = 'Failed to load products.';
+      productList.appendChild(errorMsg);
+      console.error(`an error occured : ${error}`);
+    }
   }
-}
 
-function displayProducts(products) {
-  productList.innerHTML = '';
-  products.forEach(product => {
-    const div = document.createElement('div');
-    div.className = 'product';
+  function displayProducts(products) {
+    productList.innerHTML = ''; // Clear previous content
 
-    div.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" />
-      <h4>${product.name}</h4>
-      <p>$${product.price.toFixed(2)}</p>
-      <p>${product.availability ? ' In Stock' : ' Out of Stock'}</p>
-      <button ${!product.availability ? 'disabled' : ''}>Add to Cart</button>
-    `;
+    products.forEach(product => {
+      const div = document.createElement('div');
+      div.className = 'product';
 
-    const button = div.querySelector('button');
-    button.onclick = () => addToCart(product);
+      const img = document.createElement('img');
+      img.src = product.image;
+      img.alt = product.name;
 
-    productList.appendChild(div);
-  });
-}
+      const name = document.createElement('h4');
+      name.textContent = product.name;
 
-function addToCart(product) {
-  cart.push(product);
-  updateCart();
-}
+      const price = document.createElement('p');
+      price.textContent = `$${product.price.toFixed(2)}`;
 
-function updateCart() {
-  cartList.innerHTML = '';
-  cart.forEach((item, index) => {
-    const li = document.createElement('li');
-    li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-    cartList.appendChild(li);
-  });
-}
+      const availability = document.createElement('p');
+      availability.textContent = product.availability ? 'In Stock' : 'Out of Stock';
 
-fetchProducts();
+      const button = document.createElement('button');
+      button.textContent = 'Add to Cart';
+      if (!product.availability) {
+        button.disabled = true;
+      }
+      button.onclick = () => addToCart(product);
+
+      div.appendChild(img);
+      div.appendChild(name);
+      div.appendChild(price);
+      div.appendChild(availability);
+      div.appendChild(button);
+
+      productList.appendChild(div);
+    });
+  }
+
+  function addToCart(product) {
+    cart.push(product);
+    updateCart();
+  }
+
+  function updateCart() {
+    cartList.innerHTML = ''; // Clear previous cart items
+
+    cart.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+      cartList.appendChild(li);
+    });
+  }
+
+  fetchProducts();
+};

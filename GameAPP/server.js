@@ -7,12 +7,12 @@ const Port = 4093;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors())
-app.use(express.static("public"))
+app.use(express.static("pages"))
 app.listen(Port , ()=>{
     console.log(`Port is open at: http://localhost:${Port}`)
 })
 app.get('/', (req, res) => {
- res.sendFile(path.join(__dirname, 'public/index.html'))
+ res.sendFile(path.join(__dirname, 'pages/index.html'))
 });
 app.get('/Games', (req, res) => {
  res.sendFile(path.join(__dirname, 'public/Games.html'))
@@ -45,3 +45,6 @@ app.get('/images/x-boxSilver', (req, res) => {
 app.get('/images/x-gamepad', (req, res) => {
  res.sendFile(path.join(__dirname,  "Assets/x-gamepad.jpg"))
 });
+app.get('/data', (req, res) => {
+ res.sendFile(path.join(__dirname, 'Assets/data/productData.json'))
+}); 
